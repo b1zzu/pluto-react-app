@@ -34,6 +34,7 @@ import {
   ArrowBackIos as ArrowBackIosIcon,
 } from "@mui/icons-material";
 import { Change } from "./CryptoTableView";
+import { AccountWidget } from "../widgets/AccountWidget";
 
 type LinksViewProps = {
   links?: string[];
@@ -134,7 +135,11 @@ export const CryptoView: React.FunctionComponent = () => {
               <Skeleton sx={{ minWidth: 64 }} />
             )}
           </Typography>
-          <Typography color={"text.secondary"} variant="h4">
+          <Typography
+            color={"text.secondary"}
+            variant="h4"
+            sx={{ flexGrow: 1 }}
+          >
             {cryptoInfo.symbol ? (
               cryptoInfo.symbol
             ) : (

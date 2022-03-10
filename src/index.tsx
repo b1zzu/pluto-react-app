@@ -7,18 +7,24 @@ import { CryptoView } from "./views/CryptoView";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { CoinMarketCapApiProvider } from "./api/CoinMarketCapApi";
+import { EthereumProvider } from "./providers/EthereumProvider";
+import { Web3Provider } from "./providers/Web3Provider";
 
 ReactDOM.render(
   <React.StrictMode>
     <CoinMarketCapApiProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<App />}>
-            <Route path="" element={<CryptoTableView />} />
-            <Route path="crypto/:id" element={<CryptoView />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <EthereumProvider>
+        <Web3Provider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<App />}>
+                <Route path="" element={<CryptoTableView />} />
+                <Route path="crypto/:id" element={<CryptoView />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </Web3Provider>
+      </EthereumProvider>
     </CoinMarketCapApiProvider>
   </React.StrictMode>,
   document.getElementById("root")
