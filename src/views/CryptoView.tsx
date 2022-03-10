@@ -11,6 +11,7 @@ import {
   SvgIcon,
   IconButton,
   Grid,
+  Skeleton,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
@@ -35,25 +36,38 @@ import {
 import { Change } from "./CryptoTableView";
 
 type LinksViewProps = {
-  links: string[];
+  links?: string[];
   icon: typeof SvgIcon;
 };
 
 const LinksView: React.FunctionComponent<LinksViewProps> = (props) => {
   return (
     <>
-      {props.links.map((link) => (
-        <ListItem key={link} disableGutters disablePadding>
-          <ListItemIcon sx={{ minWidth: 32 }}>
-            <props.icon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText sx={{ overflow: "hidden" }}>
-            <Link href={link} target="_blank" underline="hover" color="inherit">
-              {link}
-            </Link>
+      {props.links ? (
+        props.links.map((link) => (
+          <ListItem key={link} disableGutters disablePadding>
+            <ListItemIcon sx={{ minWidth: 32 }}>
+              <props.icon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText sx={{ overflow: "hidden" }}>
+              <Link
+                href={link}
+                target="_blank"
+                underline="hover"
+                color="inherit"
+              >
+                {link}
+              </Link>
+            </ListItemText>
+          </ListItem>
+        ))
+      ) : (
+        <ListItem disableGutters disablePadding>
+          <ListItemText>
+            <Skeleton />
           </ListItemText>
         </ListItem>
-      ))}
+      )}
     </>
   );
 };
@@ -100,20 +114,32 @@ export const CryptoView: React.FunctionComponent = () => {
         </Link>
         <Typography color="text.primary">{cryptoInfo.name}</Typography>
       </Breadcrumbs>
-      <Paper>
+      <Paper sx={{ paddingTop: 1 }}>
         <Toolbar sx={{ paddingBottom: 1 }}>
-          <Box sx={{ paddingTop: 1.5, paddingBottom: 1, paddingRight: 1 }}>
-            <img
-              style={{ maxHeight: 32 }}
-              src={cryptoInfo.logo?.replace("64x64", "32x32")}
-              alt={""}
-            />
+          <Box sx={{ paddingTop: 1.5, paddingBottom: 1, paddingRight: 2 }}>
+            {cryptoInfo.logo ? (
+              <img
+                style={{ height: 32, width: 32 }}
+                src={cryptoInfo.logo.replace("64x64", "32x32")}
+                alt={""}
+              />
+            ) : (
+              <Skeleton variant="circular" width={40} height={40} />
+            )}
           </Box>
-          <Typography variant="h6" sx={{ paddingRight: 1 }}>
-            {cryptoInfo.name}
+          <Typography variant="h4" sx={{ paddingRight: 1 }}>
+            {cryptoInfo.name ? (
+              cryptoInfo.name
+            ) : (
+              <Skeleton sx={{ minWidth: 64 }} />
+            )}
           </Typography>
-          <Typography color={"text.secondary"} variant="h6">
-            {cryptoInfo.symbol}
+          <Typography color={"text.secondary"} variant="h4">
+            {cryptoInfo.symbol ? (
+              cryptoInfo.symbol
+            ) : (
+              <Skeleton sx={{ minWidth: 32 }} />
+            )}
           </Typography>
         </Toolbar>
 
@@ -126,66 +152,67 @@ export const CryptoView: React.FunctionComponent = () => {
         >
           <Grid container spacing={2} sx={{ paddingBottom: 2 }}>
             <Grid item xs={6}>
-              <Typography
-                sx={{ fontWeight: "bold", paddingRight: 2 }}
-                component="span"
-              >
-                Price:
-              </Typography>
-              <Typography paragraph={false} component="span">
-                {(cryptoQuote.quote?.["USD"].price || 0).toLocaleString()}{" "}
-                <b>$</b>
-              </Typography>
+              {cryptoQuote.quote ? (
+                <>
+                  <Typography
+                    sx={{ fontWeight: "bold", paddingRight: 2 }}
+                    component="span"
+                  >
+                    Price:
+                  </Typography>
+                  <Typography paragraph={false} component="span">
+                    {(cryptoQuote.quote?.["USD"].price || 0).toLocaleString()}{" "}
+                    <b>$</b>
+                  </Typography>
+                </>
+              ) : (
+                <Typography>
+                  <Skeleton />
+                </Typography>
+              )}
             </Grid>
             <Grid item xs={6}>
-              <Typography
-                sx={{ fontWeight: "bold", paddingRight: 2 }}
-                component="span"
-              >
-                24h %:
-              </Typography>
-              <Change
-                value={cryptoQuote.quote?.["USD"].percent_change_24h || 0}
-              />
+              {cryptoQuote.quote ? (
+                <>
+                  <Typography
+                    sx={{ fontWeight: "bold", paddingRight: 2 }}
+                    component="span"
+                  >
+                    24h %:
+                  </Typography>
+                  <Change
+                    value={cryptoQuote.quote?.["USD"].percent_change_24h || 0}
+                  />
+                </>
+              ) : (
+                <Typography>
+                  <Skeleton />
+                </Typography>
+              )}
             </Grid>
           </Grid>
           <Typography paragraph variant="body1">
-            {cryptoInfo.description}
+            {cryptoInfo.description || <Skeleton height={96} />}
           </Typography>
           <List disablePadding>
+            <LinksView links={cryptoInfo.urls?.website} icon={LanguageIcon} />
             <LinksView
-              links={cryptoInfo.urls?.website || []}
-              icon={LanguageIcon}
-            />
-            <LinksView
-              links={cryptoInfo.urls?.technical_doc || []}
+              links={cryptoInfo.urls?.technical_doc}
               icon={ArticlIcon}
             />
+            <LinksView links={cryptoInfo.urls?.explorer} icon={ExploreIcon} />
+            <LinksView links={cryptoInfo.urls?.source_code} icon={CodeIcon} />
             <LinksView
-              links={cryptoInfo.urls?.explorer || []}
-              icon={ExploreIcon}
-            />
-            <LinksView
-              links={cryptoInfo.urls?.source_code || []}
-              icon={CodeIcon}
-            />
-            <LinksView
-              links={cryptoInfo.urls?.message_board || []}
+              links={cryptoInfo.urls?.message_board}
               icon={MessageIcon}
             />
-            <LinksView links={cryptoInfo.urls?.chat || []} icon={ChatIcon} />
+            <LinksView links={cryptoInfo.urls?.chat} icon={ChatIcon} />
             <LinksView
-              links={cryptoInfo.urls?.announcement || []}
+              links={cryptoInfo.urls?.announcement}
               icon={NotificationsIcon}
             />
-            <LinksView
-              links={cryptoInfo.urls?.reddit || []}
-              icon={RedditIcon}
-            />
-            <LinksView
-              links={cryptoInfo.urls?.twitter || []}
-              icon={TwitterIcon}
-            />
+            <LinksView links={cryptoInfo.urls?.reddit} icon={RedditIcon} />
+            <LinksView links={cryptoInfo.urls?.twitter} icon={TwitterIcon} />
           </List>
         </Box>
       </Paper>

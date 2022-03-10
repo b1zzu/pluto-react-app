@@ -12,6 +12,7 @@ import {
   Breadcrumbs,
   TablePagination,
   IconButton,
+  Skeleton,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -45,7 +46,9 @@ export const CryptoTableView: React.FunctionComponent = () => {
   const tableHeadRef = useRef<HTMLTableSectionElement>(null);
 
   const coinMarketCapApi = useCoinMarketCapApi();
-  const [cryptos, setCryptos] = useState<V1CryptoCurrencyLatest[]>([]);
+  const [cryptos, setCryptos] = useState<
+    V1CryptoCurrencyLatest[] | undefined
+  >();
 
   const page = parseInt(searchParams.get("page") || "0");
   const rows = parseInt(searchParams.get("rows") || "10");
@@ -58,7 +61,6 @@ export const CryptoTableView: React.FunctionComponent = () => {
         limit: rows,
       })
       .then((result) => {
-        console.log(result);
         setCryptos(result.data.data);
       });
   }, [coinMarketCapApi, page, rows]);
@@ -70,6 +72,7 @@ export const CryptoTableView: React.FunctionComponent = () => {
   const handlePageChange = (_event: unknown, page: number) => {
     searchParams.set("page", page.toString());
     setSearchParams(searchParams);
+    setCryptos(undefined);
     scrollTop();
   };
 
@@ -92,12 +95,14 @@ export const CryptoTableView: React.FunctionComponent = () => {
         <IconButton aria-label="delete" size="small" onClick={handleBackClick}>
           <ArrowBackIosIcon fontSize="inherit" />
         </IconButton>
-        <Typography color="text.primary">Cryptos</Typography>
+        <Link component={RouterLink} underline="hover" color="inherit" to="/">
+          Cryptos
+        </Link>
       </Breadcrumbs>
-      <Paper>
+      <Paper sx={{paddingTop: 1}}>
         <Toolbar>
-          <AttachMoneyIcon />
-          <Typography variant="h6">Cryptocurrencies</Typography>
+          <AttachMoneyIcon fontSize="large" />
+          <Typography variant="h4">Cryptocurrencies</Typography>
         </Toolbar>
         <TableContainer>
           <Table>
@@ -109,28 +114,46 @@ export const CryptoTableView: React.FunctionComponent = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {cryptos.map((crypto) => {
-                return (
-                  <TableRow key={crypto.id}>
-                    <TableCell>
-                      <Link
-                        color="inherit"
-                        underline="none"
-                        component={RouterLink}
-                        to={`crypto/${crypto.id}`}
-                      >
-                        <b>{crypto.name}</b> {crypto.symbol}
-                      </Link>
-                    </TableCell>
-                    <TableCell sx={{ whiteSpace: "nowrap" }} align="right">
-                      {crypto.quote["USD"].price.toLocaleString()} <b>$</b>
-                    </TableCell>
-                    <TableCell sx={{ whiteSpace: "nowrap" }} align="right">
-                      <Change value={crypto.quote["USD"].percent_change_24h} />
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+              {cryptos
+                ? cryptos.map((crypto) => {
+                    return (
+                      <TableRow key={crypto.id}>
+                        <TableCell>
+                          <Link
+                            color="inherit"
+                            underline="none"
+                            component={RouterLink}
+                            to={`crypto/${crypto.id}`}
+                          >
+                            <b>{crypto.name}</b> {crypto.symbol}
+                          </Link>
+                        </TableCell>
+                        <TableCell sx={{ whiteSpace: "nowrap" }} align="right">
+                          {crypto.quote["USD"].price.toLocaleString()} <b>$</b>
+                        </TableCell>
+                        <TableCell sx={{ whiteSpace: "nowrap" }} align="right">
+                          <Change
+                            value={crypto.quote["USD"].percent_change_24h}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+                : Array.from(Array(rows).keys()).map((i) => {
+                    return (
+                      <TableRow key={i}>
+                        <TableCell>
+                          <Skeleton variant="text" />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton variant="text" />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton variant="text" />
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
             </TableBody>
           </Table>
         </TableContainer>
