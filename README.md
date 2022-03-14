@@ -1,46 +1,60 @@
-# Getting Started with Create React App
+# Pluto React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a sample project that lists Cryptocurrencies from the [CoinMarketCap API](https://coinmarketcap.com/api/documentation/v1/). The project is powered by [Create React App](https://create-react-app.dev/), [Material UI](https://mui.com/) and [React Router](https://reactrouterdotcom.fly.dev/).
 
-## Available Scripts
+## Try it out
 
-In the project directory, you can run:
+### Prerequisistes
 
-### `npm start`
+- Node.js >= 12
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Getting start
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+1. Obtain a CoinMarketCap Pro API Key from https://pro.coinmarketcap.com/
 
-### `npm test`
+   > Note: If you don't configure the CoinMarketCap Pro API Key the project will fallback to the CoinMarketCap Sandbox API and will therefore expose only mock data
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. Create a `.env` file in the project root with the CoinMarketCap API endpoint and key like this:
 
-### `npm run build`
+   ```
+   REACT_APP_COINMARKETCAP_ENDPOINT=https://pro-api.coinmarketcap.com
+   REACT_APP_COINMARKETCAP_API_KEY=your-coinmarketcap-private-key
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+   the result will look like this:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+   ```
+   $ ls -a
+   .  ..  config-overrides.js  .env  .git  .gitignore  package.json  package-lock.json  .prettierrc  public  README.md  src  tsconfig.json
+   $ cat .env
+   REACT_APP_COINMARKETCAP_ENDPOINT=https://pro-api.coinmarketcap.com
+   REACT_APP_COINMARKETCAP_API_KEY=your-coinmarketcap-private-key
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3. Install all the project dependencies:
 
-### `npm run eject`
+   ```
+   npm install
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+4. Start the project locally:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+   ```
+   npm start
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+   > If the project will not open automatically in your default browser go to http://localhost:3000/
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+   ![image](https://user-images.githubusercontent.com/7964685/158197203-79ac0839-10f7-46ae-b085-1cdce16c3563.png)
 
-## Learn More
+### Connect to the MetaMask wallet
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+**Requirements:**
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- MetaMask Browser extension installed
+- At least one account in MetaMask
+- And MetaMask must be unlocked
+
+1. Click on the Login icon in the top-right corner of the App
+2. A MetaMask pop-up will open where you can select the account to connect
+3. After connecting an Account always in the top-right corner you can open the drop-down with your account address
