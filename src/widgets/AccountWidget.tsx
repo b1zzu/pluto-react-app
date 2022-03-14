@@ -2,8 +2,7 @@ import {
   AccountBalanceWallet as AccountBalanceWalletIcon,
   Login as LoginIcon,
 } from "@mui/icons-material";
-import { IconButton, Menu, MenuItem } from "@mui/material";
-import { color } from "@mui/system";
+import { IconButton, Menu, MenuItem, Tooltip } from "@mui/material";
 import React from "react";
 import { useEffect, useState } from "react";
 import { useEthereum } from "../providers/EthereumProvider";
@@ -83,16 +82,18 @@ export const AccountWidget: React.FunctionComponent = () => {
           </Menu>
         </>
       ) : (
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="menu-appbar"
-          aria-haspopup="true"
-          color="inherit"
-          onClick={handleConnect}
-        >
-          <LoginIcon />
-        </IconButton>
+        <Tooltip title="Connect to MetaMask">
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            color="inherit"
+            onClick={handleConnect}
+          >
+            <LoginIcon />
+          </IconButton>
+        </Tooltip>
       )}
     </>
   );

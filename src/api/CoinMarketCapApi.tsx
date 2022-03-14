@@ -1,5 +1,4 @@
 import { Axios, AxiosResponse } from "axios";
-import { SupportLanguage } from "prettier";
 import React, { useContext } from "react";
 
 export type V1CryptoCurrencyListingsLatestParams = {

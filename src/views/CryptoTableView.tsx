@@ -6,12 +6,10 @@ import {
   TableRow,
   TableCell,
   TableHead,
-  Toolbar,
+  Box,
   Typography,
   Link,
-  Breadcrumbs,
   TablePagination,
-  IconButton,
   Skeleton,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
@@ -19,15 +17,8 @@ import {
   useCoinMarketCapApi,
   V1CryptoCurrencyLatest,
 } from "../api/CoinMarketCapApi";
-import {
-  Link as RouterLink,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
-import {
-  AttachMoney as AttachMoneyIcon,
-  ArrowBackIos as ArrowBackIosIcon,
-} from "@mui/icons-material";
+import { Link as RouterLink, useSearchParams } from "react-router-dom";
+import { AttachMoney as AttachMoneyIcon } from "@mui/icons-material";
 import { PriceChange } from "../components/PriceChange";
 import { Price } from "../components/Price";
 import {
@@ -36,7 +27,6 @@ import {
 } from "../components/NavBreadcrumbs";
 
 export const CryptoTableView: React.FunctionComponent = () => {
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const tableHeadRef = useRef<HTMLTableSectionElement>(null);
@@ -86,11 +76,26 @@ export const CryptoTableView: React.FunctionComponent = () => {
       <NavBreadcrumbs>
         <NavBreadcrumbsItem to="/">Home</NavBreadcrumbsItem>
       </NavBreadcrumbs>
-      <Paper sx={{ paddingTop: 1 }}>
-        <Toolbar>
-          <AttachMoneyIcon fontSize="large" />
-          <Typography variant="h4">Cryptocurrencies</Typography>
-        </Toolbar>
+      <Paper sx={{ paddingTop: 2 }}>
+        <Box
+          sx={{
+            paddingBottom: 1,
+            paddingLeft: { xs: 2, sm: 4 },
+            paddingRight: { xs: 2, sm: 4 },
+          }}
+        >
+          <AttachMoneyIcon
+            fontSize="large"
+            sx={{ height: 32, width: 32, paddingRight: 1, marginBottom: -0.5 }}
+          />
+          <Typography
+            variant="h4"
+            component="div"
+            sx={{ display: "inline-block" }}
+          >
+            Cryptocurrencies
+          </Typography>
+        </Box>
         <TableContainer>
           <Table>
             <TableHead ref={tableHeadRef}>
