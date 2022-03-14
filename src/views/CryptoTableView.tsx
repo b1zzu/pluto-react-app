@@ -28,16 +28,12 @@ import {
   AttachMoney as AttachMoneyIcon,
   ArrowBackIos as ArrowBackIosIcon,
 } from "@mui/icons-material";
-
-export const Change: React.FunctionComponent<{ value: number }> = (props) => {
-  const color = props.value >= 0 ? "green" : "red";
-  return (
-    <Typography color={color} component="span">
-      {props.value.toLocaleString(undefined, { minimumFractionDigits: 2 })}{" "}
-      <b>%</b>
-    </Typography>
-  );
-};
+import { PriceChange } from "../components/PriceChange";
+import { Price } from "../components/Price";
+import {
+  NavBreadcrumbs,
+  NavBreadcrumbsItem,
+} from "../components/NavBreadcrumbs";
 
 export const CryptoTableView: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -85,21 +81,12 @@ export const CryptoTableView: React.FunctionComponent = () => {
     scrollTop();
   };
 
-  const handleBackClick = () => {
-    navigate(-1);
-  };
-
   return (
     <>
-      <Breadcrumbs aria-label="breadcrumb" sx={{ paddingBottom: 1 }}>
-        <IconButton aria-label="delete" size="small" onClick={handleBackClick}>
-          <ArrowBackIosIcon fontSize="inherit" />
-        </IconButton>
-        <Link component={RouterLink} underline="hover" color="inherit" to="/">
-          Cryptos
-        </Link>
-      </Breadcrumbs>
-      <Paper sx={{paddingTop: 1}}>
+      <NavBreadcrumbs>
+        <NavBreadcrumbsItem to="/">Home</NavBreadcrumbsItem>
+      </NavBreadcrumbs>
+      <Paper sx={{ paddingTop: 1 }}>
         <Toolbar>
           <AttachMoneyIcon fontSize="large" />
           <Typography variant="h4">Cryptocurrencies</Typography>
@@ -129,10 +116,10 @@ export const CryptoTableView: React.FunctionComponent = () => {
                           </Link>
                         </TableCell>
                         <TableCell sx={{ whiteSpace: "nowrap" }} align="right">
-                          {crypto.quote["USD"].price.toLocaleString()} <b>$</b>
+                          <Price value={crypto.quote["USD"].price} />
                         </TableCell>
                         <TableCell sx={{ whiteSpace: "nowrap" }} align="right">
-                          <Change
+                          <PriceChange
                             value={crypto.quote["USD"].percent_change_24h}
                           />
                         </TableCell>
